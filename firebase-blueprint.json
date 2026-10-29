@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profile",
+      "description": "User profile data for MA students and administrators",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID matching auth.uid", "maxLength": 128 },
+        "email": { "type": "string", "description": "User email address", "maxLength": 128 },
+        "displayName": { "type": "string", "description": "User full name", "maxLength": 100 },
+        "role": { "type": "string", "description": "Role of the user", "enum": ["admin", "student"] },
+        "grade": { "type": "string", "description": "Madrasah Aliyah class grade", "enum": ["X", "XI", "XII", "Umum"] },
+        "madrasah": { "type": "string", "description": "Madrasah / school name", "maxLength": 150 },
+        "createdAt": { "type": "string", "description": "ISO timestamp of creation", "maxLength": 64 },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of update", "maxLength": 64 }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "progress": {
+      "title": "Student Progress",
+      "description": "User learning progress, scores, and completed modules",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "User ID owning this progress", "maxLength": 128 },
+        "maharah": { "type": "string", "description": "Category of maharah", "enum": ["istima", "kalam", "qiraah", "kitabah", "qawaid"] },
+        "lessonId": { "type": "string", "description": "Unique ID of lesson or quiz", "maxLength": 128 },
+        "score": { "type": "number", "description": "Score achieved (0-100)" },
+        "completed": { "type": "boolean", "description": "Completion flag" },
+        "feedback": { "type": "string", "description": "AI or teacher feedback", "maxLength": 2000 },
+        "completedAt": { "type": "string", "description": "ISO timestamp", "maxLength": 64 }
+      },
+      "required": ["userId", "maharah", "lessonId", "score"]
+    },
+    "custom_materials": {
+      "title": "Custom Lesson Material",
+      "description": "Admin created lessons, readings, audio texts, and exercises",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Lesson title in Indonesian", "maxLength": 200 },
+        "titleAr": { "type": "string", "description": "Lesson title in Arabic", "maxLength": 200 },
+        "maharah": { "type": "string", "description": "Maharah category", "enum": ["istima", "kalam", "qiraah", "kitabah", "qawaid"] },
+        "grade": { "type": "string", "description": "MA grade", "enum": ["X", "XI", "XII", "Semua"] },
+        "contentAr": { "type": "string", "description": "Arabic text content", "maxLength": 10000 },
+        "contentId": { "type": "string", "description": "Indonesian translation or explanation", "maxLength": 10000 },
+        "vocabulary": { "type": "string", "description": "Serialized vocab list", "maxLength": 5000 },
+        "authorId": { "type": "string", "description": "Author UID", "maxLength": 128 },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "maxLength": 64 }
+      },
+      "required": ["title", "titleAr", "maharah", "contentAr", "authorId"]
+    },
+    "announcements": {
+      "title": "Madrasah Announcement",
+      "description": "Announcements posted by teacher/admin for students",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Announcement title", "maxLength": 200 },
+        "body": { "type": "string", "description": "Announcement message content", "maxLength": 2000 },
+        "authorEmail": { "type": "string", "description": "Author email", "maxLength": 128 },
+        "date": { "type": "string", "description": "Date formatted", "maxLength": 64 }
+      },
+      "required": ["title", "body", "authorEmail"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/users" },
+      "description": "User profile document keyed by user auth UID"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": { "$ref": "#/entities/progress" },
+      "description": "Progress records per user"
+    },
+    "/custom_materials/{materialId}": {
+      "schema": { "$ref": "#/entities/custom_materials" },
+      "description": "Lessons and reading materials managed by admins"
+    },
+    "/announcements/{announcementId}": {
+      "schema": { "$ref": "#/entities/announcements" },
+      "description": "Announcements visible to all students"
+    }
+  }
+}

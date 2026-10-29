@@ -1,0 +1,6 @@
+{
+  "name": "Al-Arabiyyah MA - Pembelajaran Bahasa Arab Terpadu",
+  "description": "Platform pembelajaran Bahasa Arab interaktif untuk Madrasah Aliyah (MA) dengan materi lengkap 4 maharah (Istima', Kalam, Qira'ah, Kitabah), evaluasi AI, dan manajemen admin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
